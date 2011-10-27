@@ -1,0 +1,45 @@
+# Project: CNetSoul
+# Makefile created by Dev-C++ 4.9.9.2
+
+CPP  = g++.exe
+CC   = gcc.exe
+WINDRES = windres.exe
+RES  = CNetSoul_private.res
+OBJ  = main.o send.o recv.o socks.o func.o $(RES)
+LINKOBJ  = main.o send.o recv.o socks.o func.o $(RES)
+LIBS =  -L"C:/Dev-Cpp/lib" -lcurses -lws2_32 -lssl32 -leay32 -lpthreadGC2  
+INCS =  -I"C:/Dev-Cpp/include" 
+CXXINCS =  -I"C:/Dev-Cpp/lib/gcc/mingw32/3.4.2/include"  -I"C:/Dev-Cpp/include/c++/3.4.2/backward"  -I"C:/Dev-Cpp/include/c++/3.4.2/mingw32"  -I"C:/Dev-Cpp/include/c++/3.4.2"  -I"C:/Dev-Cpp/include" 
+BIN  = CNetSoul.exe
+CXXFLAGS = $(CXXINCS)   -fexpensive-optimizations -O3
+CFLAGS = $(INCS) -D_REENTRANT   -fexpensive-optimizations -O3
+RM = rm -f
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before CNetSoul.exe all-after
+
+
+clean: clean-custom
+	${RM} $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+	$(CC) $(LINKOBJ) -o "CNetSoul.exe" $(LIBS)
+
+main.o: main.c
+	$(CC) -c main.c -o main.o $(CFLAGS)
+
+send.o: send.c
+	$(CC) -c send.c -o send.o $(CFLAGS)
+
+recv.o: recv.c
+	$(CC) -c recv.c -o recv.o $(CFLAGS)
+
+socks.o: socks.c
+	$(CC) -c socks.c -o socks.o $(CFLAGS)
+
+func.o: func.c
+	$(CC) -c func.c -o func.o $(CFLAGS)
+
+CNetSoul_private.res: CNetSoul_private.rc 
+	$(WINDRES) -i CNetSoul_private.rc --input-format=rc -o CNetSoul_private.res -O coff 
