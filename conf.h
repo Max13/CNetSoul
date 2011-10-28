@@ -17,12 +17,12 @@
 # include <stdlib.h>
 # include <string.h>
 
-
 # define NS_HOSTNAME "ns-server.epita.fr"
 # define NS_PORT 4242
 
 # ifdef WIN32
 #  include <winsock2.h>
+#  define CLEAR "cls"
 # elif defined (linux) || defined (__APPLE__)
 #  include <sys/types.h>
 #  include <sys/socket.h>
@@ -30,6 +30,7 @@
 #  include <arpa/inet.h>
 #  include <unistd.h> /* close */
 #  include <netdb.h> /* gethostbyname */
+#  define CLEAR "clear"
 #  define INVALID_SOCKET -1
 #  define SOCKET_ERROR -1
 #  define closesocket(s) close(s)
@@ -42,10 +43,15 @@
 # endif
 
 typedef struct hostent HOSTENT;
+typedef struct
+{
+  char username[8];
+  char password[8];
+} S_UINFO;
 
 void socks_init(void);
 void socks_connect(SOCKET *, HOSTENT *, SOCKADDR_IN *);
-void socks_authentification(SOCKET *);
+void socks_authentification(SOCKET *, S_UINFO *);
 void socks_end(void);
 void socks_exit(void);
 int socks_error(void);

@@ -48,7 +48,7 @@ void socks_connect(SOCKET *sock, HOSTENT *hostinfo, SOCKADDR_IN *sin)
 	puts("You are connected !");
 }
 
-void socks_authentification(SOCKET *sock)
+void socks_authentification(SOCKET *sock, S_UINFO *u_info)
 {
 	const int bufferSize = 100;
 	char recvBuffer[bufferSize];
@@ -85,8 +85,8 @@ void socks_authentification(SOCKET *sock)
 	}
 
 	clean_str(recvBuffer, bufferSize);
-	sprintf(recvBuffer, "%s-%s/%hu%s", recvMd5, client_host, client_port, NS_PASS);
-	/*
+	sprintf(recvBuffer, "%s-%s/%hu%s", recvMd5, client_host, client_port, u_info->password);
+
 	puts(recvBuffer);
 	puts("Recv Put");
 	MD5_Init(md5_ctx);
@@ -95,8 +95,7 @@ void socks_authentification(SOCKET *sock)
 	puts("UPDATE_MD5");
 	MD5_Final(md5Buffer, md5_ctx);
 	puts("MD5_Final");
-	*/
-	md5Buffer = MD5(recvBuffer, strlen(recvBuffer), NULL);
+	//md5Buffer = MD5(recvBuffer, strlen(recvBuffer), NULL);
 
 	clean_str(readableMd5Buffer, (MD5_DIGEST_LENGTH * 2 + 1));
 	for (n = 0; n < MD5_DIGEST_LENGTH; n++)
@@ -106,7 +105,7 @@ void socks_authentification(SOCKET *sock)
 	puts(recvBuffer);
 
 	clean_str(authBuffer, bufferSize);
-	sprintf(authBuffer, "ext_user_log %s %s none test\n", NS_USER, readableMd5Buffer);
+	sprintf(authBuffer, "ext_user_log %s %s none test\n", u_info->password, readableMd5Buffer);
 	puts(authBuffer);
 	send(*sock, authBuffer, strlen(authBuffer), 0);
 

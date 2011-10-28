@@ -8,15 +8,25 @@
 
 int main(int argc, char *argv[])
 {
+	system(CLEAR);
 	socks_init();
 
-    SOCKET sock;
-    HOSTENT *hostinfo;
-    SOCKADDR_IN sin = { 0 };
-    pthread_t *threadID;
+	SOCKET sock;
+	HOSTENT *hostinfo;
+	SOCKADDR_IN sin = { 0 };
+	pthread_t *threadID;
+	S_UINFO u_info;
+
+	printf("NetSoul Username (unix login): ");
+	gets(u_info.username);
+
+	printf("Your password (socks): ");
+	gets(u_info.password);
+
+	system(CLEAR);
 
 	socks_connect(&sock, hostinfo, &sin);
-	socks_authentification(&sock);
+	socks_authentification(&sock, &u_info);
 
 	pthread_create(threadID, NULL, recv_waiting, NULL);
 
